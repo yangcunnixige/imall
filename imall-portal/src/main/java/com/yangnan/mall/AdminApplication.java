@@ -18,6 +18,6 @@ public class AdminApplication {
         SpringApplication app = new SpringApplication(AdminApplication.class);
         Environment environment = app.run(args).getEnvironment();
         LOG.info("启动成功");
-        LOG.info("地址:\thttp://127.0.0.1:{}", environment.getProperty("server.port"));
+        LOG.info("地址:\thttp://localhost:{}", environment.getProperty("server.port"));
     }
 }
