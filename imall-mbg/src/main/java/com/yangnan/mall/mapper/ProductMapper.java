@@ -1,6 +1,9 @@
 package com.yangnan.mall.mapper;
 
 import com.yangnan.mall.pojo.Product;
+import com.yangnan.mall.pojo.query.ProductQuery;
+
+import java.util.List;
 
 public interface ProductMapper {
     int deleteByPrimaryKey(Integer id);
@@ -14,4 +17,8 @@ public interface ProductMapper {
     int updateByPrimaryKeySelective(Product record);
 
     int updateByPrimaryKey(Product record);
+
+    List<Product> selectAll();
+
+    List<Product> selectByPage(ProductQuery productQuery);
 }
