@@ -1,6 +1,7 @@
 package com.yangnan.mall.mapper;
 
 import com.yangnan.mall.pojo.Product;
+import com.yangnan.mall.pojo.Category;
 import com.yangnan.mall.pojo.query.ProductQuery;
 
 import java.util.List;
@@ -21,4 +22,6 @@ public interface ProductMapper {
     List<Product> selectAll();
 
     List<Product> selectByPage(ProductQuery productQuery);
+
+    int deleteAll(Integer[] ids);
 }

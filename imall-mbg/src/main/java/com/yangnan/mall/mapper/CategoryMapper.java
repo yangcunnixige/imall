@@ -2,6 +2,8 @@ package com.yangnan.mall.mapper;
 
 import com.yangnan.mall.pojo.Category;
 
+import java.util.List;
+
 public interface CategoryMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -14,4 +16,8 @@ public interface CategoryMapper {
     int updateByPrimaryKeySelective(Category record);
 
     int updateByPrimaryKey(Category record);
+
+    List<Category> selectTopCategoryList();
+
+    List<Category> selectSecondCategoryListByTopCategoryId(Integer id);
 }

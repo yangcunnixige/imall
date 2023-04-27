@@ -2,6 +2,7 @@ package com.yangnan.mall.service.impl;
 
 import com.yangnan.mall.mapper.ProductMapper;
 import com.yangnan.mall.pojo.Product;
+import com.yangnan.mall.pojo.Category;
 import com.yangnan.mall.pojo.query.ProductQuery;
 import com.yangnan.mall.service.IProductService;
 import com.yangnan.mall.util.JSONResult;
@@ -44,4 +45,17 @@ public class ProductServiceImpl implements IProductService {
         int count = productMapper.deleteByPrimaryKey(id);
         return count == 1 ? JSONResult.ok("删除成功") : JSONResult.error("删除失败");
     }
+
+    @Override
+    public JSONResult deleteAll(Integer[] ids) {
+        int count = productMapper.deleteAll(ids);
+        return count == ids.length ? JSONResult.ok("删除成功") : JSONResult.error("删除失败");
+    }
+
+    @Override
+    public JSONResult add(Product product) {
+        int count = productMapper.insertSelective(product);
+        return count == 1 ? JSONResult.ok("添加成功") : JSONResult.error("添加失败");
+    }
+
 }

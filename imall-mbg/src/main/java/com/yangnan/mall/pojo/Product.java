@@ -1,5 +1,6 @@
 package com.yangnan.mall.pojo;
 
+import com.yangnan.mall.util.ImageServerUtil;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -30,6 +31,11 @@ public class Product implements Serializable {
     private Date gmtCreate;
 
     private Date gmtModified;
+
+    //mainImageFullUrl
+    public String getMainImageFullUrl() {
+        return ImageServerUtil.getImageUrl(mainImage);
+    }
 
     private static final long serialVersionUID = 1L;
 

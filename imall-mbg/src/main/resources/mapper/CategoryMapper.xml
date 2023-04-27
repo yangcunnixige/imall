@@ -114,4 +114,18 @@
       gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectTopCategoryList" resultType="com.yangnan.mall.pojo.Category">
+    select
+    <include refid="Base_Column_List" />
+    from category
+    where parent_id=0
+  </select>
+
+  <select id="selectSecondCategoryListByTopCategoryId" resultType="com.yangnan.mall.pojo.Category">
+    select
+    <include refid="Base_Column_List" />
+    from category
+    where parent_id=#{id}
+  </select>
 </mapper>

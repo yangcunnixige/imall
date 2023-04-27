@@ -202,4 +202,13 @@
       </if>
     </where>
   </select>
+
+  <delete id="deleteAll">
+    delete from product
+    where id IN
+    <foreach collection="array" open="(" close=")" item="id" separator=",">
+      #{id}
+    </foreach>
+  </delete>
+
 </mapper>
