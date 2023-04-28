@@ -6,10 +6,28 @@
 </head>
 <body>
 <div class="demoTable">
-    商品名：
-    <div class="layui-inline">
-        <input class="layui-input" id="nameId" autocomplete="off">
-    </div>
+    <form class="layui-form layui-inline" action="">
+        商品名：
+        <div class="layui-inline">
+            <input class="layui-input" id="nameId" autocomplete="off">
+        </div>
+        状态：
+        <div class="layui-inline">
+            <select id="statusId">
+                <option value="">-请选择-</option>
+                <option value="1">上架</option>
+                <option value="2">下架</option>
+            </select>
+        </div>
+        创建开始时间
+        <div class="layui-inline">
+            <input id="beginGmtCreateId" type="text" autocomplete="off" class="layui-input" placeholder="yyyy-MM-dd HH:mm:ss">
+        </div>
+        创建结束时间
+        <div class="layui-inline">
+            <input id="endGmtCreateId" type="text" autocomplete="off" class="layui-input"  placeholder="yyyy-MM-dd HH:mm:ss">
+        </div>
+    </form>
     <button class="layui-btn" data-type="reload">搜索</button>
 </div>
 <table class="layui-hide" id="test" lay-filter="test"></table>
@@ -42,8 +60,19 @@
     /*layui.use(['table'], function() {
 
     });*/
-    layui.use('table', function(){
+    layui.use(['table', 'laydate'], function(){
         var table = layui.table;
+        var laydate = layui.laydate;
+
+        //日期时间选择器
+        laydate.render({
+            elem: '#beginGmtCreateId'
+            ,type: 'datetime'
+        });
+        laydate.render({
+            elem: '#endGmtCreateId'
+            ,type: 'datetime'
+        });
 
         table.render({
             elem: '#test'
@@ -66,7 +95,8 @@
                     ,{field:'price', title:'价格'}
                     ,{field:'stock', title:'库存'}
                     ,{field:'status', title:'状态', templet:'#statusTemplet'}
-                    ,{field:'gmtCreate', title:'创建时间'}
+                    ,{field:'gmtCreate', title:'创建时间',templet:"<div>{{d.gmtCreate?layui.util.toDateString(d.gmtCreate, 'yyyy-MM-dd HH:mm:ss'):'未知'}}</div>"}
+                    ,{field:'gmtModified', title:'修改时间'}
                     ,{fixed: 'right', title:'操作', toolbar: '#barDemo'}
                 ]
             ]
@@ -189,6 +219,9 @@
                     }
                     ,where: {
                         name: $('#nameId').val(),
+                        status: $('#statusId').val(),
+                        beginGmtCreate: $('#beginGmtCreateId').val(),
+                        endGmtCreate: $('#endGmtCreateId').val()
                     }
                 });
             }

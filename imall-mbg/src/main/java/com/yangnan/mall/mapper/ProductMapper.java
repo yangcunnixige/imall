@@ -24,4 +24,6 @@ public interface ProductMapper {
     List<Product> selectByPage(ProductQuery productQuery);
 
     int deleteAll(Integer[] ids);
+
+    List<Product> selectByName(String name);
 }

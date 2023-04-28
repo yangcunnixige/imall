@@ -192,7 +192,24 @@
     from product
   </select>
 
-  <select id="selectByPage" resultType="com.yangnan.mall.pojo.Product">
+  <select id="selectByPage" parameterType="ProductQuery" resultType="com.yangnan.mall.pojo.Product">
+    select
+    <include refid="Base_Column_List" />
+    from product
+    <where>
+      <if test="name!=null and name!=''">
+        and name like concat('%', #{name}, '%')
+      </if>
+      <if test="status!=null">
+        and status=#{status}
+      </if>
+      <if test="beginGmtCreate!=null and endGmtCreate!=null">
+        and gmt_create between #{beginGmtCreate} and #{endGmtCreate}
+      </if>
+    </where>
+  </select>
+
+  <select id="selectByName" resultType="com.yangnan.mall.pojo.Product">
     select
     <include refid="Base_Column_List" />
     from product

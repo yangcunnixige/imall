@@ -1,25 +1,18 @@
 package com.yangnan.mall.config;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
-import com.yangnan.mall.converter.String2DateConverter;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebConfigurer implements WebMvcConfigurer {
 
-    @Override
-    public void addFormatters(FormatterRegistry registry) {
-        registry.addConverter(new String2DateConverter());
-    }
-
     // 配置虚拟路径
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/pic/**")
-                .addResourceLocations("file:/D:\\project\\blog\\src\\mypic\\");
+                .addResourceLocations("file:/D:\\project\\imall\\imall-portal\\src\\main\\resources\\static\\");
         WebMvcConfigurer.super.addResourceHandlers(registry);
     }
 

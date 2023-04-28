@@ -1,5 +1,6 @@
 package com.yangnan.mall.pojo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.yangnan.mall.util.ImageServerUtil;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -30,6 +31,8 @@ public class Product implements Serializable {
 
     private Date gmtCreate;
 
+    //SpringBoot设置后台向前台传递Date日期格式
+    //@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date gmtModified;
 
     //mainImageFullUrl
