@@ -220,6 +220,13 @@
     </where>
   </select>
 
+  <select id="selectByCategoryId" resultType="com.yangnan.mall.pojo.Product">
+    select
+    <include refid="Base_Column_List" />
+    from product
+    where category_id=${id}
+  </select>
+
   <delete id="deleteAll">
     delete from product
     where id IN

@@ -9,4 +9,6 @@ public interface IProductService {
     List<Product> selectByName(String name);
 
     Product selectById(Integer id);
+
+    List<Product> selectByCategoryId(Integer id);
 }

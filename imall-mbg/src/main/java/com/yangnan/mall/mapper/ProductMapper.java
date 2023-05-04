@@ -26,4 +26,6 @@ public interface ProductMapper {
     int deleteAll(Integer[] ids);
 
     List<Product> selectByName(String name);
+
+    List<Product> selectByCategoryId(Integer id);
 }

@@ -8,7 +8,7 @@
 
 </head>
 <body>
-<div class="header_con">
+<!--<div class="header_con">
     <div class="header">
         <div class="welcome fl">欢迎来到天天生鲜!</div>
         <div class="fr">
@@ -42,7 +42,9 @@
         <a href="cart.html" class="cart_name fl">我的购物车</a>
         <div class="goods_count fl" id="show_count">1</div>
     </div>
-</div>
+</div>-->
+
+<div th:replace="top::top"></div>
 
 <div class="navbar_con">
     <div class="navbar clearfix">
@@ -89,7 +91,8 @@
         <div class="goods_num clearfix">
             <div class="num_name fl">数 量：</div>
             <div class="num_add fl">
-                <input type="text" class="num_show fl" value="1">
+<!--                <input type="text" class="num_show fl" value="1">-->
+                <input id="quantity" type="text" class="num_show fl" value="1">
                 <a href="javascript:;" class="add fr">+</a>
                 <a href="javascript:;" class="minus fr">-</a>
             </div>
@@ -152,8 +155,84 @@
 </div>
 <div class="add_jump"></div>
 
-<script type="text/javascript" src="js/jquery-1.12.2.js"></script>
+<div id="loginForm" style="display: none" class="login_form fr">
+    <div class="login_title clearfix">
+        <h1>用户登录</h1>
+        <a href="#">立即注册</a>
+    </div>
+    <div class="form_input">
+        <form id="formId">
+            <input type="text" name="username" class="name_input" placeholder="请输入用户名">
+            <div class="user_error">输入错误</div>
+            <input type="password" name="password" class="pass_input" placeholder="请输入密码">
+            <div class="pwd_error">输入错误</div>
+            <div class="more_input clearfix">
+                <input type="checkbox" name="">
+                <label>记住用户名</label>
+                <a href="#">忘记密码</a>
+            </div>
+            <input type="button" onclick="submitForm()" name="" value="登录" class="input_submit">
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript" th:src="@{/jquery-2.1.4.js}"></script>
+<script type="text/javascript" th:src="@{/layer/layer.js}"></script>
+<script type="text/javascript" th:src="@{/mylayer.js}"></script>
 <script type="text/javascript">
+    $('#add_cart').click(function(){
+        //加入购物车之前首先判断有没有登录
+        //如果没有登录首先完成登录
+        //如果已经登录，就将商品信息插入到cart购物车表里面，然后跳转到购物车列表界面
+        $.post(
+            '/user/checkUserLogin',
+            function(jsonResult) {
+                if (jsonResult.ok) {
+                    //已经登录直接加入购物车
+                    insertToCart();
+                } else {
+                    layer.open({
+                        type: 1,
+                        title: '登录',
+                        area: ['370px', '480px'],
+                        content: $('#loginForm')
+                    });
+                }
+            },
+            'json'
+        );
+    })
+
+    function submitForm() {
+        $.post(
+            '/user/login',
+            $('#formId').serialize(),
+            function(jsonResult) {
+                if (jsonResult.ok) {
+                    insertToCart();
+                } else {
+                    mylayer.errorMsg(jsonResult.msg);
+                }
+            },
+            'json'
+        );
+    }
+
+    function insertToCart() {
+        $.post(
+            '/cart/add',
+            {'productId': [[${product.id}]], 'quantity':$('#quantity').val()},
+            function(jsonResult) {
+                if (jsonResult.ok) {
+                    mylayer.okUrl(jsonResult.msg, '/cart/getCartListPage')
+                } else {
+                    mylayer.errorMsg(jsonResult.msg);
+                }
+            },
+            'json'
+        );
+    }
+
     var $add_x = $('#add_cart').offset().top;
     var $add_y = $('#add_cart').offset().left;
 

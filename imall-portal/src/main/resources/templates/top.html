@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="top">
+    <div class="header_con">
+        <div class="header">
+            <div class="welcome fl">11欢迎来到天天生鲜!</div>
+            <div class="fr">
+                <div class="login_info fl">
+                    欢迎您：<em>张 山</em>
+                </div>
+                <div class="login_btn fl">
+                    <a href="login.html">登录</a>
+                    <span>|</span>
+                    <a href="register.html">注册</a>
+                </div>
+                <div class="user_link fl">
+                    <span>|</span>
+                    <a href="user_center_info.html">用户中心</a>
+                    <span>|</span>
+                    <a href="cart.html">我的购物车</a>
+                    <span>|</span>
+                    <a href="user_center_order.html">我的订单</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="search_bar clearfix">
+        <a href="/" class="logo fl"><img th:src="@{/images/logo.png}"></a>
+        <div class="search_con fl">
+            <form action="/product/selectByName" method="post">
+                <input type="text" class="input_text fl" name="name" placeholder="搜索商品">
+                <input type="submit" class="input_btn fr"value="搜索">
+            </form>
+        </div>
+        <div class="guest_cart fr">
+            <a href="#" class="cart_name fl">我的购物车</a>
+            <div class="goods_count fl" id="show_count">1</div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
