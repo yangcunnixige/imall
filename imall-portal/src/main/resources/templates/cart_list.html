@@ -32,7 +32,7 @@
 </div>
 
 <div class="search_bar clearfix">
-    <a href="index.html" class="logo fl"><img src="images/logo.png"></a>
+    <a href="/" class="logo fl"><img th:src="@{/images/logo.png}"></a>
     <div class="sub_page_name fl">|&nbsp;&nbsp;&nbsp;&nbsp;购物车</div>
     <div class="search_con fr">
         <input type="text" class="input_text fl" name="" placeholder="搜索商品">
@@ -49,45 +49,35 @@
     <li class="col05">小计</li>
     <li class="col06">操作</li>
 </ul>
-<ul class="cart_list_td clearfix">
-    <li class="col01"><input type="checkbox" name="" checked></li>
-    <li class="col02"><img src="images/goods/goods012.jpg"></li>
-    <li class="col03">奇异果<br><em>25.80元/500g</em></li>
-    <li class="col04">500g</li>
-    <li class="col05">25.80元</li>
-    <li class="col06">
-        <div class="num_add">
-            <a href="javascript:;" class="add fl">+</a>
-            <input type="text" class="num_show fl" value="1">
-            <a href="javascript:;" class="minus fl">-</a>
-        </div>
-    </li>
-    <li class="col07">25.80元</li>
-    <li class="col08"><a href="javascript:;">删除</a></li>
-</ul>
-
-<ul class="cart_list_td clearfix">
-    <li class="col01"><input type="checkbox" name="" checked></li>
-    <li class="col02"><img src="images/goods/goods003.jpg"></li>
-    <li class="col03">大兴大棚草莓<br><em>16.80元/500g</em></li>
-    <li class="col04">500g</li>
-    <li class="col05">16.80元</li>
-    <li class="col06">
-        <div class="num_add">
-            <a href="javascript:;" class="add fl">+</a>
-            <input type="text" class="num_show fl" value="1">
-            <a href="javascript:;" class="minus fl">-</a>
-        </div>
-    </li>
-    <li class="col07">16.80元</li>
-    <li class="col08"><a href="javascript:;">删除</a></li>
-</ul>
+<th:block th:each="cartVO:${list}">
+    <ul th:id="${cartVO.id}" class="cart_list_td clearfix">
+        <li class="col01">
+            <th:block th:if="${cartVO.checked==1}">
+                <input th:id="|checkbox${cartVO.id}|" name="selectCheckbox" th:onclick="|updateChecked(${cartVO.id}, this.checked)|" type="checkbox" checked/>            </th:block>
+            <th:block th:if="${cartVO.checked==0}">
+                <input th:id="|checkbox${cartVO.id}|" name="selectCheckbox" th:onclick="|updateChecked(${cartVO.id}, this.checked)|" type="checkbox" />            </th:block>
+        </li>
+        <li class="col02"><img th:src="${cartVO.MainImageFullUrl}"></li>
+        <li class="col03" th:text="${cartVO.productName}"><br><em>25.80元/500g</em></li>
+        <li class="col04">500g</li>
+        <li th:id="|productPrice${cartVO.id}|" class="col05"  th:text="${cartVO.productPrice}"></li>
+        <li class="col06">
+            <div class="num_add">
+                <a th:onclick="|updateQuantity(${cartVO.id}, 1)|" href="javascript:;" class="add fl">+</a>
+                <input th:id="|quantityId${cartVO.id}|" type="text" class="num_show fl" th:value="${cartVO.quantity}">
+                <a th:onclick="|updateQuantity(${cartVO.id}, -1)|" href="javascript:;" class="minus fl">-</a>
+            </div>
+        </li>
+        <li th:id="|cartItemTotalPrice${cartVO.id}|" class="col07" th:text="|${cartVO.productPrice*cartVO.quantity}元|"></li>
+        <li class="col08"><a th:onclick="'deleteById('+${cartVO.id}+')'" href="javascript:;">删除</a></li>
+    </ul>
+</th:block>
 
 
 <ul class="settlements">
     <li class="col01"><input type="checkbox" name="" checked=""></li>
     <li class="col02">全选</li>
-    <li class="col03">合计(不含运费)：<span>¥</span><em>42.60</em><br>共计<b>2</b>件商品</li>
+    <li class="col03">合计(不含运费)：<span>¥</span><em id="totalPrice"></em><br>共计<b id="checkedTotalCount"></b>件商品</li>
     <li class="col04"><a href="place_order.html">去结算</a></li>
 </ul>
 
@@ -104,6 +94,102 @@
     <p>CopyRight © 2016 北京天天生鲜信息技术有限公司 All Rights Reserved</p>
     <p>电话：010-****888    京ICP备*******8号</p>
 </div>
+
+<script type="text/javascript" th:src="@{/jquery-2.1.4.js}"></script>
+<script type="text/javascript" th:src="@{/layer/layer.js}"></script>
+<script type="text/javascript" th:src="@{/mylayer.js}"></script>
+<script>
+
+    $(function() {
+        refreshTotalPrice();
+    });
+
+    function refreshTotalPrice() {
+        var checkboxs = $('input[name=selectCheckbox]:checked');
+        $('#checkedTotalCount').text(checkboxs.length);
+        var totalPrice = 0;
+        $(checkboxs).each(function() {
+            //this dom对象
+            //checkbox111            checkbox222
+            //cartItemTotalPrice111  cartItemTotalPrice222
+            var checkboxId = this.id;
+            var cartId = checkboxId.substr('checkbox'.length);//111
+            var str = $('#cartItemTotalPrice' + cartId).text();//1892839元
+            var cartItemTotalPrice = str.substr(0, str.length - 1);
+            console.log(cartItemTotalPrice);
+            totalPrice += parseFloat(cartItemTotalPrice);
+        });
+        $('#totalPrice').text(totalPrice);
+    }
+
+
+    function updateQuantity(cartId, quantity) {
+        $.post(
+            '/cart/updateQuantity',
+            {'id': cartId, 'quantity': quantity},
+            function(jsonResult) {
+                console.log(jsonResult);
+                var newQuantity = parseInt($('#quantityId'+cartId).val()) + quantity;
+                $('#quantityId'+cartId).val(newQuantity);
+                var productPrice = $('#productPrice' + cartId).text();
+                //更新cartItemTotalPrice值
+                $('#cartItemTotalPrice'+cartId).text(productPrice * newQuantity + '元');
+                refreshTotalPrice();
+            },
+            'json'
+        );
+    }
+
+    function updateChecked(cartId, checked) {
+        console.log('cartId: ' + cartId);
+        console.log('checked: ' + checked);
+        $.post(
+            '/cart/updateChecked',
+            {'id': cartId, 'checked': checked ? 1 : 0},
+            function(jsonResult) {
+                if (jsonResult.ok) {
+                    mylayer.okMsg(jsonResult.msg);
+                    refreshTotalPrice();
+                } else {
+                    mylayer.errorMsg(jsonResult.msg);
+                }
+            }
+        );
+    }
+
+
+    function deleteById(id) {
+        $.post(
+            '/cart/deleteById',
+            {'id': id},
+            function(jsonResult) {
+                if (jsonResult.ok) {
+                    $('#'+id+'').remove();
+                    mylayer.okMsg(jsonResult.msg);
+                    refreshTotalPrice();
+                } else {
+                    mylayer.errorMsg(jsonResult.msg);
+                }
+            }
+        );
+    }
+
+    function changeCount(id) {
+        $.post(
+            '/cart/change',
+            {'Id': id, 'quantity':1},
+            function(jsonResult) {
+                if (jsonResult.ok) {
+                    mylayer.okUrl(jsonResult.msg,);
+                    refreshTotalPrice();
+                } else {
+                    mylayer.errorMsg(jsonResult.msg);
+                }
+            },
+            'json'
+        );
+    }
+</script>
 
 </body>
 </html>

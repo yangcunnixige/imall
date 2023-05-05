@@ -138,4 +138,34 @@
       gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <update id="updateCount">
+    update cart set quantity=quantity+#{quantity}
+    where user_id=#{userId} and product_id=#{productId}
+  </update>
+
+  <update id="updateChecked">
+    update cart set checked=#{checked}
+    where id=#{id}
+  </update>
+
+  <update id="updateQuantity">
+    update cart set quantity=quantity+#{quantity}
+    where id=#{id}
+  </update>
+
+  <select id="selectByUserId" resultType="com.yangnan.mall.pojo.vo.CartVO">
+    SELECT c.id,c.checked,c.quantity,p.main_image as productMainImage,p.name as productName,p.price as productPrice
+    FROM cart AS c INNER JOIN product AS p
+                              ON c.product_id=p.id
+    where c.user_id=#{id}
+  </select>
+
+  <select id="selectCountByUserIdAndProductId" resultType="java.lang.Integer">
+    select count(*)
+    from cart
+    where user_id=#{userId} and product_id=#{productId}
+  </select>
+
+
 </mapper>

@@ -1,6 +1,9 @@
 package com.yangnan.mall.mapper;
 
 import com.yangnan.mall.pojo.Cart;
+import com.yangnan.mall.pojo.vo.CartVO;
+
+import java.util.List;
 
 public interface CartMapper {
     int deleteByPrimaryKey(Integer id);
@@ -14,4 +17,14 @@ public interface CartMapper {
     int updateByPrimaryKeySelective(Cart record);
 
     int updateByPrimaryKey(Cart record);
+
+    List<CartVO> selectByUserId(Integer id);
+
+    int selectCountByUserIdAndProductId(Cart cart);
+
+    int updateCount(Cart cart);
+
+    int updateChecked(Integer id, Integer checked);
+
+    int updateQuantity(Integer id, Integer quantity);
 }
