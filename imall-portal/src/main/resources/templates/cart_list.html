@@ -75,7 +75,7 @@
 
 
 <ul class="settlements">
-    <li class="col01"><input type="checkbox" name="" checked=""></li>
+    <li class="col01"><input onclick="checkAll()" id="checkAll" type="checkbox" name=""></li>
     <li class="col02">全选</li>
     <li class="col03">合计(不含运费)：<span>¥</span><em id="totalPrice"></em><br>共计<b id="checkedTotalCount"></b>件商品</li>
     <li class="col04"><a href="place_order.html">去结算</a></li>
@@ -105,10 +105,10 @@
     });
 
     function refreshTotalPrice() {
-        var checkboxs = $('input[name=selectCheckbox]:checked');
-        $('#checkedTotalCount').text(checkboxs.length);
+        var selectCheckboxs = $('input[name=selectCheckbox]:checked');
+        $('#checkedTotalCount').text(selectCheckboxs.length);
         var totalPrice = 0;
-        $(checkboxs).each(function() {
+        $(selectCheckboxs).each(function() {
             //this dom对象
             //checkbox111            checkbox222
             //cartItemTotalPrice111  cartItemTotalPrice222
@@ -120,8 +120,32 @@
             totalPrice += parseFloat(cartItemTotalPrice);
         });
         $('#totalPrice').text(totalPrice);
+
+        var checkboxs = $('input[name=selectCheckbox]')
+        if (selectCheckboxs.length == checkboxs.length) {
+            $('#checkAll').prop('checked', true);
+        } else {
+            $('#checkAll').prop('checked', false);
+        }
     }
 
+
+    function checkAll() {
+        $('#checkAll').is(':checked')?$('input[name=selectCheckbox]').prop('checked', true):$('input[name=selectCheckbox]').prop('checked', false);
+        var checked = $('#checkAll').is(':checked') ? 1 : 0;
+        $.post(
+            '/cart/updateCheckedAll',
+            {'checked': checked},
+            function(jsonResult) {
+                if (jsonResult.ok) {
+                    mylayer.okMsg(jsonResult.msg);
+                    refreshTotalPrice();
+                } else {
+                    mylayer.errorMsg(jsonResult.msg);
+                }
+            }
+        );
+    }
 
     function updateQuantity(cartId, quantity) {
         $.post(
@@ -149,6 +173,14 @@
             function(jsonResult) {
                 if (jsonResult.ok) {
                     mylayer.okMsg(jsonResult.msg);
+                    var selectCheckboxs = $('input[name=selectCheckbox]:checked')
+                    var checkboxs = $('input[name=selectCheckbox]')
+                    if (selectCheckboxs.length == checkboxs.length) {
+                        $('#checkAll').prop('checked', true);
+                    } else {
+                        $('#checkAll').prop('checked', false);
+                    }
+
                     refreshTotalPrice();
                 } else {
                     mylayer.errorMsg(jsonResult.msg);
@@ -156,6 +188,7 @@
             }
         );
     }
+
 
 
     function deleteById(id) {

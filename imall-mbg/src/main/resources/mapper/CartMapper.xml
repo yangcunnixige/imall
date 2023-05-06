@@ -154,6 +154,11 @@
     where id=#{id}
   </update>
 
+  <update id="updateCheckedAll">
+    update cart set checked=#{checked}
+    where user_id=#{userId}
+  </update>
+
   <select id="selectByUserId" resultType="com.yangnan.mall.pojo.vo.CartVO">
     SELECT c.id,c.checked,c.quantity,p.main_image as productMainImage,p.name as productName,p.price as productPrice
     FROM cart AS c INNER JOIN product AS p

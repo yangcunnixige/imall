@@ -53,4 +53,12 @@ public class CartController {
     public JSONResult updateQuantity(Integer id, Integer quantity) {
         return cartService.updateQuantity(id, quantity);
     }
+
+    @RequestMapping("/updateCheckedAll")
+    @ResponseBody
+    public JSONResult updateCheckedAll(HttpSession session, Integer checked) {
+        User user = (User) session.getAttribute("user");
+        return cartService.updateCheckedAll(user.getId(), checked);
+    }
+
 }

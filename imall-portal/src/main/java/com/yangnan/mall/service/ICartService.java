@@ -16,4 +16,6 @@ public interface ICartService {
     JSONResult deleteById(Integer id);
 
     JSONResult updateQuantity(Integer id, Integer quantity);
+
+    JSONResult updateCheckedAll(Integer userId, Integer checked);
 }

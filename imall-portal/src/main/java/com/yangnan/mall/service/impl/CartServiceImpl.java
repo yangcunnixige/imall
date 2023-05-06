@@ -49,4 +49,10 @@ public class CartServiceImpl implements ICartService {
         int count = cartMapper.updateQuantity(id, quantity);
         return count == 1 ? JSONResult.ok("更新成功") : JSONResult.error("更新失败");
     }
+
+    @Override
+    public JSONResult updateCheckedAll(Integer userId, Integer checked) {
+        int count = cartMapper.updateCheckedAll(userId, checked);
+        return count >= 1 ? JSONResult.ok("更新成功") : JSONResult.error("更新失败");
+    }
 }
