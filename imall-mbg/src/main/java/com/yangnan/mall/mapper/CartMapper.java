@@ -29,4 +29,6 @@ public interface CartMapper {
     int updateQuantity(Integer id, Integer quantity);
 
     int updateCheckedAll(Integer userId, Integer checked);
+
+    List<CartVO> selectByUserIdAndChecked(Integer id);
 }

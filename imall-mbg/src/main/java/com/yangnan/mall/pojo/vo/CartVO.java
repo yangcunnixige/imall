@@ -10,6 +10,7 @@ public class CartVO {
     private Integer id;
     private Integer checked;
     private Integer quantity;
+    private Integer productId;
     private String productMainImage;
     private String productName;
     private BigDecimal productPrice;

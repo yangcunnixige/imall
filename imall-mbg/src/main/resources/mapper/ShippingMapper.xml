@@ -28,6 +28,14 @@
     from shipping
     where id = #{id,jdbcType=INTEGER}
   </select>
+
+  <select id="selectByUserId" resultType="com.yangnan.mall.pojo.Shipping">
+    select
+    <include refid="Base_Column_List" />
+    from shipping
+    where user_id = #{id}
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from shipping
     where id = #{id,jdbcType=INTEGER}

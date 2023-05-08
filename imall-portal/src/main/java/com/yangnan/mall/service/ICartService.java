@@ -18,4 +18,6 @@ public interface ICartService {
     JSONResult updateQuantity(Integer id, Integer quantity);
 
     JSONResult updateCheckedAll(Integer userId, Integer checked);
+
+    List<CartVO> selectByUserIdAndChecked(Integer id);
 }

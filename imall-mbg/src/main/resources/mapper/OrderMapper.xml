@@ -24,15 +24,15 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from order
+    from `order`
     where order_no = #{orderNo,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from order
+    delete from `order`
     where order_no = #{orderNo,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.yangnan.mall.pojo.Order">
-    insert into order (order_no, user_id, shipping_id, 
+    insert into `order` (order_no, user_id, shipping_id,
       payment, payment_type, postage, 
       payment_time, send_time, end_time, 
       close_time, `status`, deleted, 
@@ -44,7 +44,7 @@
       #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.yangnan.mall.pojo.Order">
-    insert into order
+    insert into `order`
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="orderNo != null">
         order_no,
@@ -135,7 +135,7 @@
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.yangnan.mall.pojo.Order">
-    update order
+    update `order`
     <set>
       <if test="userId != null">
         user_id = #{userId,jdbcType=INTEGER},
@@ -180,7 +180,7 @@
     where order_no = #{orderNo,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.yangnan.mall.pojo.Order">
-    update order
+    update `order`
     set user_id = #{userId,jdbcType=INTEGER},
       shipping_id = #{shippingId,jdbcType=INTEGER},
       payment = #{payment,jdbcType=DECIMAL},

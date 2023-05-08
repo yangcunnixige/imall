@@ -172,5 +172,12 @@
     where user_id=#{userId} and product_id=#{productId}
   </select>
 
+  <select id="selectByUserIdAndChecked" resultType="com.yangnan.mall.pojo.vo.CartVO">
+    SELECT c.id,c.checked,c.quantity,p.id as productId,p.main_image as productMainImage,p.name as productName,p.price as productPrice
+    FROM cart AS c INNER JOIN product AS p
+                              ON c.product_id=p.id
+    where c.user_id=#{id} and checked=1
+  </select>
+
 
 </mapper>
