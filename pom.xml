@@ -78,7 +78,11 @@
             <version>2.8.5</version>
             <scope>compile</scope>
         </dependency>
-
+        <!--面向切面-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
 
         <!-- Apache Commons IO  -->
         <dependency>
