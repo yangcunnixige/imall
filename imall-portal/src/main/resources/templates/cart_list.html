@@ -7,7 +7,7 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
 </head>
 <body>
-<div class="header_con">
+<!--<div class="header_con">
     <div class="header">
         <div class="welcome fl">欢迎来到天天生鲜!</div>
         <div class="fr">
@@ -38,9 +38,11 @@
         <input type="text" class="input_text fl" name="" placeholder="搜索商品">
         <input type="button" class="input_btn fr" name="" value="搜索">
     </div>
-</div>
+</div>-->
 
-<div class="total_count">全部商品<em>2</em>件</div>
+<div th:replace="top::top"></div>
+
+<div class="total_count">全部商品<em th:text="${list.size()}"></em>件</div>
 <ul class="cart_list_th clearfix">
     <li class="col01">商品名称</li>
     <li class="col02">商品单位</li>

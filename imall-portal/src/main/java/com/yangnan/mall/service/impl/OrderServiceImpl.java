@@ -6,6 +6,7 @@ import com.yangnan.mall.mapper.OrderMapper;
 import com.yangnan.mall.pojo.Order;
 import com.yangnan.mall.pojo.OrderItem;
 import com.yangnan.mall.pojo.vo.CartVO;
+import com.yangnan.mall.pojo.vo.OrderVO;
 import com.yangnan.mall.service.ICartService;
 import com.yangnan.mall.service.IOrderService;
 import com.yangnan.mall.util.JSONResult;
@@ -57,16 +58,21 @@ public class OrderServiceImpl implements IOrderService {
             orderItem.setTotalPrice(totalPrice);
 
             orderItemMapper.insertSelective(orderItem);
-
+            cartMapper.deleteByPrimaryKey(cartVO.getId());
             payment = payment.add(totalPrice);
         }
 
         order.setPayment(payment);
         orderMapper.insertSelective(order);
 
-
         return JSONResult.ok("插入成功");
     }
+
+    @Override
+    public List<OrderVO> selectByUserId(Integer id) {
+        return orderMapper.selectByUserId(id);
+    }
+
 
     public static void main(String[] args) {
         System.out.println(0.1 + 0.2);//0.30000000000000004

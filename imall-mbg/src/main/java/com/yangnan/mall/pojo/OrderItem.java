@@ -1,5 +1,7 @@
 package com.yangnan.mall.pojo;
 
+import com.yangnan.mall.util.ImageServerUtil;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -16,6 +18,10 @@ public class OrderItem implements Serializable {
     private String productName;
 
     private String productImage;
+
+    public String getMainImageFullUrl() {
+        return ImageServerUtil.getImageUrl(productImage);
+    }
 
     private BigDecimal currentUnitPrice;
 

@@ -4,6 +4,7 @@ import com.yangnan.mall.pojo.Order;
 import com.yangnan.mall.pojo.Shipping;
 import com.yangnan.mall.pojo.User;
 import com.yangnan.mall.pojo.vo.CartVO;
+import com.yangnan.mall.pojo.vo.OrderVO;
 import com.yangnan.mall.service.ICartService;
 import com.yangnan.mall.service.IOrderService;
 import com.yangnan.mall.service.IShippingService;
@@ -46,7 +47,10 @@ public class OrderController {
     }
 
     @RequestMapping("/getOrderListPage")
-    public String getOrderListPage() {
+    public String getOrderListPage(HttpSession session, Model model) {
+        User user = (User) session.getAttribute("user");
+        List<OrderVO> list = orderService.selectByUserId(user.getId());
+        model.addAttribute("list", list);
         return "order_list";
     }
 }

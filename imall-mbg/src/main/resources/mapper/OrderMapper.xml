@@ -196,4 +196,26 @@
       gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
     where order_no = #{orderNo,jdbcType=BIGINT}
   </update>
+
+  <resultMap id="OrderVOResultMap" type="com.yangnan.mall.pojo.vo.OrderVO">
+    <id column="order_no" jdbcType="BIGINT" property="orderNo" />
+    <result column="payment" jdbcType="DECIMAL" property="payment" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <collection property="list" ofType="OrderItem">
+      <result column="product_id" property="productId" />
+      <result column="product_image" property="productImage" />
+      <result column="product_name" property="productName" />
+      <result column="current_unit_price" property="currentUnitPrice" />
+      <result column="quantity" property="quantity" />
+      <result column="total_price" property="totalPrice" />
+    </collection>
+  </resultMap>
+
+  <select id="selectByUserId" resultType="com.yangnan.mall.pojo.vo.OrderVO" resultMap="OrderVOResultMap">
+    SELECT o.order_no,o.gmt_create,o.status,o.payment,oi.product_id,oi.product_image,oi.product_name,oi.current_unit_price,oi.quantity,oi.total_price
+    FROM `order` AS o INNER JOIN order_item AS oi
+                                 ON o.order_no=oi.order_no
+    WHERE o.user_id=#{id}
+  </select>
 </mapper>
