@@ -1,7 +1,9 @@
 package com.yangnan.mall.config;
 
 import org.springframework.context.annotation.Configuration;
+import com.yangnan.mall.interceptor.LoginInterceptor;
 import org.springframework.format.FormatterRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -23,12 +25,11 @@ public class WebConfigurer implements WebMvcConfigurer {
 			<bean class="com.situ.mvc.interceptor.MyInterceptor2"/>
 		</mvc:interceptor>
 	</mvc:interceptors>*/
-    /*@Override
+    @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // addPathPatterns("/**") 表示拦截所有的请求
         // excludePathPatterns()   代表排除哪些请求不需要拦截
         registry.addInterceptor(new LoginInterceptor())
-                .addPathPatterns("/**")
-                .excludePathPatterns("/user/login", "/user/getLoginPage", "/auth/code", "/static/**");
-    }*/
+                .addPathPatterns("/cart/**", "/order/**");
+    }
 }

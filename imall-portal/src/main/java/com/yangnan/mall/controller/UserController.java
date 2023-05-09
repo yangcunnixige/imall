@@ -34,4 +34,9 @@ public class UserController {
             return JSONResult.ok("登录成功");
         }
     }
+
+    @RequestMapping("/getLoginPage")
+    public String getLoginPage() {
+        return "login";
+    }
 }
