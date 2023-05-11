@@ -215,7 +215,8 @@
   <select id="selectByUserId" resultType="com.yangnan.mall.pojo.vo.OrderVO" resultMap="OrderVOResultMap">
     SELECT o.order_no,o.gmt_create,o.status,o.payment,oi.product_id,oi.product_image,oi.product_name,oi.current_unit_price,oi.quantity,oi.total_price
     FROM `order` AS o INNER JOIN order_item AS oi
-                                 ON o.order_no=oi.order_no
+    ON o.order_no=oi.order_no
     WHERE o.user_id=#{id}
+    order by o.gmt_create desc
   </select>
 </mapper>
