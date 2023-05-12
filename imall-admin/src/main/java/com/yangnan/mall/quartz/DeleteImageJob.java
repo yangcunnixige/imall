@@ -35,6 +35,9 @@ public class DeleteImageJob {
                 redisTemplate.opsForSet().remove(RedisConstant.UPLOAD_IMAGE, imageName);
                 System.out.println("删除图片：" + imageName);
             }
+            //删除redis中图片
+            redisTemplate.delete(RedisConstant.UPLOAD_IMAGE);
+            redisTemplate.delete(RedisConstant.UPLOAD_IMAGE_TO_DB);
         }
     }
 }
