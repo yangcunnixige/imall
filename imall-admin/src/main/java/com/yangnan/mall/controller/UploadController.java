@@ -1,9 +1,12 @@
 package com.yangnan.mall.controller;
 
+import com.yangnan.mall.config.RedisConstant;
 import com.yangnan.mall.util.JSONResult;
 import com.yangnan.mall.util.ImageServerUtil;
 import com.yangnan.mall.util.QiniuUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -16,6 +19,8 @@ import java.util.UUID;
 @Controller
 @RequestMapping("/upload")
 public class UploadController {
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @RequestMapping("/uploadImage")
     @ResponseBody
@@ -44,6 +49,9 @@ public class UploadController {
                 e.printStackTrace();
             }
         }
+
+        //将上传的图片保存到Redis里面
+        redisTemplate.opsForSet().add(RedisConstant.UPLOAD_IMAGE, newFileName);
 
         return JSONResult.ok("", newFileName);
     }

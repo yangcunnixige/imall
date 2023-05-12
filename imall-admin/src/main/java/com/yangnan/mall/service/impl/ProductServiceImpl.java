@@ -1,5 +1,6 @@
 package com.yangnan.mall.service.impl;
 
+import com.yangnan.mall.config.RedisConstant;
 import com.yangnan.mall.mapper.ProductMapper;
 import com.yangnan.mall.pojo.Product;
 import com.yangnan.mall.pojo.Category;
@@ -11,12 +12,16 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class ProductServiceImpl implements IProductService {
+    @Autowired
+    private RedisTemplate redisTemplate;
+
     @Autowired
     private ProductMapper productMapper;
 
@@ -55,6 +60,10 @@ public class ProductServiceImpl implements IProductService {
     @Override
     public JSONResult add(Product product) {
         int count = productMapper.insertSelective(product);
+
+        //将上传的图片而且保存到数据库中保存到Redis里面
+        redisTemplate.opsForSet().add(RedisConstant.UPLOAD_IMAGE_TO_DB, product.getMainImage());
+
         return count == 1 ? JSONResult.ok("添加成功") : JSONResult.error("添加失败");
     }
 
