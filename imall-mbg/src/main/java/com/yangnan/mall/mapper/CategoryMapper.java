@@ -22,4 +22,6 @@ public interface CategoryMapper {
     List<Category> selectSecondCategoryListByTopCategoryId(Integer id);
 
     List<Category> selectSecondCategoryList();
+
+    int selectTopCategoryIdBySecondCategotyId(Integer id);
 }

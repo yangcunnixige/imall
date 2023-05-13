@@ -21,8 +21,13 @@ public class CategoryServiceImpl implements ICategoryService {
     }
 
     @Override
-    public JSONResult selectSecondCategoryListByTopCategoryId(Integer id) {
+    public List<Category> selectSecondCategoryListByTopCategoryId(Integer id) {
         List<Category> list = categoryMapper.selectSecondCategoryListByTopCategoryId(id);
-        return JSONResult.ok(list);
+        return list;
+    }
+
+    @Override
+    public int selectTopCategoryIdBySecondCategotyId(Integer id) {
+        return categoryMapper.selectTopCategoryIdBySecondCategotyId(id);
     }
 }

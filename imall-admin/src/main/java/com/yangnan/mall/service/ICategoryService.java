@@ -8,5 +8,7 @@ import java.util.List;
 public interface ICategoryService {
     List<Category> selectTopCategoryList();
 
-    JSONResult selectSecondCategoryListByTopCategoryId(Integer id);
+    List<Category> selectSecondCategoryListByTopCategoryId(Integer id);
+
+    int selectTopCategoryIdBySecondCategotyId(Integer id);
 }

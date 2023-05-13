@@ -135,4 +135,11 @@
     from category
     where parent_id!=0
   </select>
+
+  <select id="selectTopCategoryIdBySecondCategotyId" resultType="java.lang.Integer">
+    select parent_id
+    <include refid="Base_Column_List" />
+    from category
+    where id=#{id}
+  </select>
 </mapper>

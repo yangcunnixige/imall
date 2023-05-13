@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <title>Title</title>
+    <div th:replace="header::common_resource"></div>
+</head>
+<body>
+<form id="formId" class="layui-form layui-form-pane" action="">
+    <input type="hidden" name="id" th:value="${product.id}"/>
+    <div class="layui-form-item">
+        <label class="layui-form-label">商品名字</label>
+        <div class="layui-input-block">
+            <input type="text" name="name" th:value="${product.name}" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">商品副标题</label>
+        <div class="layui-input-block">
+            <input type="text" name="subtitle" th:value="${product.subtitle}" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div  class="layui-form-item">
+        <label class="layui-form-label">商品分类</label>
+        <div class="layui-input-inline">
+            <select lay-filter="selectFilter">
+                <option>---请选择一级分类---</option>
+                <th:block th:each="category:${topCategoryList}">
+                    <th:block th:if="${category.id==topCategoryId}">
+                        <option th:value="${category.id}" th:text="${category.name}" selected/>
+                    </th:block>
+                    <th:block th:if="${category.id!=topCategoryId}">
+                        <option th:value="${category.id}" th:text="${category.name}"/>
+                    </th:block>
+                </th:block>
+            </select>
+        </div>
+        <div class="layui-input-inline">
+            <select id="categoryId" name="categoryId">
+                <option>---请选择二级分类---</option>
+                <th:block th:each="category:${secondCategoryList}">
+                    <th:block th:if="${category.id==product.categoryId}">
+                        <option th:value="${category.id}" th:text="${category.name}" selected/>
+                    </th:block>
+                    <th:block th:if="${category.id!=product.categoryId}">
+                        <option th:value="${category.id}" th:text="${category.name}"/>
+                    </th:block>
+                </th:block>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">商品价格</label>
+        <div class="layui-input-block">
+            <input type="text" name="price" th:value="${product.price}" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">商品库存</label>
+        <div class="layui-input-block">
+            <input type="text" name="stock" th:value="${product.stock}" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">商品库存</label>
+        <div class="layui-input-block">
+            <th:block th:if="${product.status==1}">
+                <input type="radio" name="status" value="1" title="在售" checked="">
+            </th:block>
+            <th:block th:if="${product.status!=1}">
+                <input type="radio" name="status" value="1" title="在售">
+            </th:block>
+            <th:block th:if="${product.status==2}">
+                <input type="radio" name="status" value="2" title="下架" checked="">
+            </th:block>
+            <th:block th:if="${product.status!=2}">
+                <input type="radio" name="status" value="2" title="下架">
+            </th:block>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">商品图片</label>
+        <div class="layui-input-block">
+            <div class="layui-upload">
+                <div class="layui-upload-list">
+                    <img th:src="${product.mainImageFullUrl}" width="250px" height="100px" class="layui-upload-img" id="demo1">
+                    <input type="hidden" id="imageId" name="mainImage" th:value="${product.mainImage}"/>
+                    <p id="demoText"></p>
+                </div>
+                <button type="button" class="layui-btn" id="test1">上传图片</button>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">商品详情</label>
+        <div class="layui-input-block">
+            <textarea id="detail" name="detail" th:text="${product.detail}" style="height: 500px" placeholder="请输入内容" class="layui-textarea">dfdfd</textarea>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button type="button" class="layui-btn"  onclick="submitForm()" lay-filter="demo1">添加</button>
+        </div>
+    </div>
+</form>
+
+<script th:src="@{/kindeditor/kindeditor.js}" type="text/javascript" charset="utf-8"></script>
+<script>
+    KindEditor.ready(function() {
+        var kindEditorParams = {
+            afterBlur: function() {
+                this.sync();
+            }
+        };
+
+        KindEditor.create('#detail', kindEditorParams);
+    });
+
+    var form;
+    layui.use(['form','upload'],function() {
+        form = layui.form;
+        var upload = layui.upload;
+
+        //绑定下拉框时间
+        form.on('select(selectFilter)', function(data){
+            console.log(data.elem);//获得select原始dom对象
+            console.log(data.value);//获得选中的option的value值
+            $.post(
+                '/category/selectSecondCategoryListByTopCategoryId',
+                {'id': data.value},
+                function(jsonResult) {
+                    console.log(jsonResult);
+                    var list = jsonResult.data;
+                    $('#categoryId option:gt(0)').remove();
+                    $(list).each(function (){
+                        //<option value="1">---请选择而级分类---</option>
+                        $('#categoryId').append('<option value="'+this.id+'">'+this.name+'</option>');
+                    });
+                    form.render('select');
+                },
+                'json'
+            );
+        });
+
+        //常规使用 - 普通图片上传
+        var uploadInst = upload.render({
+            elem: '#test1'
+            ,url: '/upload/uploadImage' //此处用的是第三方的 http 请求演示，实际使用时改成您自己的上传接口即可。
+            ,before: function(obj){
+                //预读本地文件示例，不支持ie8
+                obj.preview(function(index, file, result){
+                    $('#demo1').attr('src', result); //图片链接（base64）
+                });
+
+                layer.msg('上传中', {icon: 16, time: 0});
+            }
+            ,done: function(jsonResult){
+                if (jsonResult.ok) {
+                    mylayer.okMsg("上传成功");
+                    $('#imageId').val(jsonResult.data);
+                } else {
+                    mylayer.errorMsg("上传失败");
+                }
+
+            }
+            ,error: function(){
+                //演示失败状态，并实现重传
+                var demoText = $('#demoText');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                demoText.find('.demo-reload').on('click', function(){
+                    uploadInst.upload();
+                });
+            }
+        });
+    });
+
+    function submitForm() {
+        $.post(
+            '/product/update',
+            $('#formId').serialize(),
+            function(jsonResult) {
+                console.log(jsonResult);
+                if (jsonResult.ok) {
+                    mylayer.okMsg(jsonResult.msg)
+                    //关闭弹出框
+                    var index = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(index);
+                    //刷新父页面
+                    window.parent.location.reload();
+                } else {
+                    mylayer.errorMsg(jsonResult.msg);
+                }
+            },
+            'json'
+        );
+    }
+</script>
+</body>
+</html>

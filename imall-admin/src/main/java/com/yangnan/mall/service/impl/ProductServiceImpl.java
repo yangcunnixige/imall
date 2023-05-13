@@ -67,4 +67,10 @@ public class ProductServiceImpl implements IProductService {
         return count == 1 ? JSONResult.ok("添加成功") : JSONResult.error("添加失败");
     }
 
+    @Override
+    public JSONResult update(Product product) {
+        int count = productMapper.updateByPrimaryKeySelective(product);
+
+        return count == 1 ? JSONResult.ok("更新成功") : JSONResult.error("更新失败");
+    }
 }

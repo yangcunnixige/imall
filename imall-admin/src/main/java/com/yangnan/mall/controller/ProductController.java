@@ -83,4 +83,23 @@ public class ProductController {
         return productService.add(product);
     }
 
+    @RequestMapping("/getProductUpdatePage")
+    public String getProductUpdatePage(Integer id, Model model) {
+        Product product = productService.selectById(id);
+        List<Category> topCategoryList = categoryService.selectTopCategoryList();
+        int topCategoryId = categoryService.selectTopCategoryIdBySecondCategotyId(product.getCategoryId());
+        List<Category> secondCategoryList = categoryService.selectSecondCategoryListByTopCategoryId(topCategoryId);
+        model.addAttribute("product", product);
+        model.addAttribute("topCategoryList", topCategoryList);
+        model.addAttribute("topCategoryId", topCategoryId);
+        model.addAttribute("secondCategoryList", secondCategoryList);
+        return "product_update";
+    }
+
+    @RequestMapping("/update")
+    @ResponseBody
+    public JSONResult update(Product product) {
+        System.out.println("ProductController.update");
+        return productService.update(product);
+    }
 }

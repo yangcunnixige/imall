@@ -20,4 +20,6 @@ public interface IProductService {
     JSONResult deleteAll(Integer[] ids);
 
     JSONResult add(Product product);
+
+    JSONResult update(Product product);
 }
