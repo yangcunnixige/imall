@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <title>Title</title>
+    <div th:replace="header::common_resource"></div>
+</head>
+<body>
+<form id="formId" class="layui-form layui-form-pane" action="">
+    <input type="hidden" name="id" th:value="${user.id}"/>
+    <div class="layui-form-item">
+        <label class="layui-form-label">用户名</label>
+        <div class="layui-input-block">
+            <input type="text" name="username" th:value="${user.username}" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">密码</label>
+        <div class="layui-input-block">
+            <input type="text" name="password" th:value="${user.password}" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">邮箱</label>
+        <div class="layui-input-block">
+            <input type="text" name="email" th:value="${user.email}" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">电话</label>
+        <div class="layui-input-block">
+            <input type="text" name="phone" th:value="${user.phone}" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">状态</label>
+        <div class="layui-input-block">
+            <th:block th:if="${user.status==1}">
+                <input type="radio" name="status" value="1" title="正常" checked="">
+            </th:block>
+            <th:block th:if="${user.status!=1}">
+                <input type="radio" name="status" value="1" title="正常">
+            </th:block>
+            <th:block th:if="${user.status==0}">
+                <input type="radio" name="status" value="2" title="停用" checked="">
+            </th:block>
+            <th:block th:if="${user.status!=0}">
+                <input type="radio" name="status" value="2" title="停用">
+            </th:block>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button type="button" class="layui-btn"  onclick="submitForm()" lay-filter="demo1">添加</button>
+        </div>
+    </div>
+</form>
+
+<!--<script th:src="@{/kindeditor/kindeditor.js}" type="text/javascript" charset="utf-8"></script>-->
+<script>
+
+    function submitForm() {
+        $.post(
+            '/user/update',
+            $('#formId').serialize(),
+            function(jsonResult) {
+                console.log(jsonResult);
+                if (jsonResult.ok) {
+                    mylayer.okMsg(jsonResult.msg)
+                    //关闭弹出框
+                    var index = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(index);
+                    //刷新父页面
+                    window.parent.location.reload();
+                } else {
+                    mylayer.errorMsg(jsonResult.msg);
+                }
+            },
+            'json'
+        );
+    }
+</script>
+</body>
+</html>

@@ -7,16 +7,16 @@
 <body>
 <div class="demoTable">
     <form class="layui-form layui-inline" action="">
-        商品名：
+        用户名：
         <div class="layui-inline">
-            <input class="layui-input" id="nameId" autocomplete="off">
+            <input class="layui-input" id="usernameId" autocomplete="off">
         </div>
         状态：
         <div class="layui-inline">
             <select id="statusId">
                 <option value="">-请选择-</option>
-                <option value="1">上架</option>
-                <option value="2">下架</option>
+                <option value="1">正常</option>
+                <option value="0">停用</option>
             </select>
         </div>
         创建开始时间
@@ -50,9 +50,9 @@
 
 <script type="text/html" id="statusTemplet">
     {{#      if(d.status == 1) {                }}
-    上架
-    {{#      } else if(d.status == 2) {         }}
-    下架
+    正常
+    {{#      } else if(d.status == 0) {         }}
+    停用
     {{#      }                                  }}
 </script>
 
@@ -76,7 +76,7 @@
 
         table.render({
             elem: '#test'
-            ,url:'/product/selectByPage'
+            ,url:'/user/selectByPage'
             ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
             ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
                 title: '提示'
@@ -88,12 +88,10 @@
                 [
                     {type: 'checkbox', fixed: 'left'}
                     ,{field:'id', title:'ID',  fixed: 'left', sort: true}
-                    ,{field:'name', title:'商品名'}
-                    ,{field:'subtitle', title:'商品子标题'}
-                    ,{field:'mainImage', title:'图片', templet:'#imageTemplet'}
-                    ,{field:'detail', title:'商品详情'}
-                    ,{field:'price', title:'价格'}
-                    ,{field:'stock', title:'库存'}
+                    ,{field:'username', title:'用户名'}
+                    ,{field:'email', title:'邮箱'}
+                    // ,{field:'mainImage', title:'图片', templet:'#imageTemplet'}
+                    ,{field:'phone', title:'电话'}
                     ,{field:'status', title:'状态', templet:'#statusTemplet'}
                     ,{field:'gmtCreate', title:'创建时间',templet:"<div>{{d.gmtCreate?layui.util.toDateString(d.gmtCreate, 'yyyy-MM-dd HH:mm:ss'):'未知'}}</div>"}
                     ,{field:'gmtModified', title:'修改时间',templet:"<div>{{d.gmtCreate?layui.util.toDateString(d.gmtCreate, 'yyyy-MM-dd HH:mm:ss'):'未知'}}</div>"}
@@ -111,8 +109,8 @@
                 case 'add':
                     layer.open({
                         type: 2,
-                        area: ['950px', '600px'],
-                        content: '/product/getProductAddPage'
+                        area: ['550px', '400px'],
+                        content: '/user/getUserAddPage'
                     });
                     break;
                 case 'deleteAll':
@@ -126,7 +124,7 @@
                     ids = ids.join(',');// '4,6'
                     layer.confirm('真的删除行么', function(index){
                         $.post(
-                            '/product/deleteAll',
+                            '/user/deleteAll',
                             {'ids': ids},
                             function(jsonResult) {
                                 if (jsonResult.ok) {
@@ -170,7 +168,7 @@
             if(obj.event === 'del'){
                 layer.confirm('真的删除行么', function(index){
                     $.post(
-                        '/product/deleteById',
+                        '/user/deleteById',
                         {'id': data.id},
                         function(jsonResult) {
                             console.log(jsonResult);
@@ -204,7 +202,7 @@
                 layer.open({
                     type: 2,
                     area: ['950px', '600px'],
-                    content: '/product/getProductUpdatePage?id=' + data.id
+                    content: '/user/getUserUpdatePage?id=' + data.id
                 });
             }
         });
@@ -218,7 +216,7 @@
                         curr: 1 //重新从第 1 页开始
                     }
                     ,where: {
-                        name: $('#nameId').val(),
+                        username: $('#usernameId').val(),
                         status: $('#statusId').val(),
                         beginGmtCreate: $('#beginGmtCreateId').val(),
                         endGmtCreate: $('#endGmtCreateId').val()

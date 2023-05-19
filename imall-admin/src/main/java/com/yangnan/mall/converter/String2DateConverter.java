@@ -24,15 +24,16 @@ public class String2DateConverter implements Converter<String, Date> {
 
     @Override
     public Date convert(String source) {
-        //遍历所有的格式，如果符合就直接parse之后返回，不符合就抛出异常
-        for (SimpleDateFormat simpleDateFormat : list) {
-            try {
-                return simpleDateFormat.parse(source);
-            } catch (ParseException e) {
-                e.printStackTrace();
+        if(source!=null&&source!="") {
+            //遍历所有的格式，如果符合就直接parse之后返回，不符合就抛出异常
+            for (SimpleDateFormat simpleDateFormat : list) {
+                try {
+                    return simpleDateFormat.parse(source);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
         }
-
         return null;
     }
 }

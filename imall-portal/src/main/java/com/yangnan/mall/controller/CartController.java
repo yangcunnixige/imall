@@ -23,6 +23,7 @@ public class CartController {
     @RequestMapping("/add")
     @ResponseBody
     public JSONResult add(Cart cart, HttpSession session) {
+        System.out.println("yyyyyy"+cart);
         User user = (User) session.getAttribute("user");
         cart.setUserId(user.getId());
         return cartService.add(cart);

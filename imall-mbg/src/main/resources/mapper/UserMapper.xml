@@ -31,6 +31,7 @@
     delete from user
     where id = #{id,jdbcType=INTEGER}
   </delete>
+
   <insert id="insert" parameterType="com.yangnan.mall.pojo.User">
     insert into user (id, dept_id, username, 
       `password`, email, phone, 
@@ -193,4 +194,29 @@
     from user
     where username=#{username} and password=#{password}
   </select>
+
+  <select id="selectByPage" parameterType="UserQuery" resultType="com.yangnan.mall.pojo.User">
+    select
+    <include refid="Base_Column_List" />
+    from user
+    <where>
+      <if test="username!=null and username!=''">
+        and username like concat('%', #{username}, '%')
+      </if>
+      <if test="status!=null">
+        and status=#{status}
+      </if>
+      <if test="beginGmtCreate!=null and endGmtCreate!=null">
+        and gmt_create between #{beginGmtCreate} and #{endGmtCreate}
+      </if>
+    </where>
+  </select>
+
+  <delete id="deleteAll">
+    delete from user
+    where id IN
+    <foreach collection="array" open="(" close=")" item="id" separator=",">
+      #{id}
+    </foreach>
+  </delete>
 </mapper>
