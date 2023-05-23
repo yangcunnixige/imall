@@ -1,6 +1,9 @@
 package com.yangnan.mall.mapper;
 
 import com.yangnan.mall.pojo.Order;
+import com.yangnan.mall.pojo.User;
+import com.yangnan.mall.pojo.query.OrderQuery;
+import com.yangnan.mall.pojo.query.UserQuery;
 import com.yangnan.mall.pojo.vo.OrderVO;
 
 import java.util.List;
@@ -19,4 +22,6 @@ public interface OrderMapper {
     int updateByPrimaryKey(Order record);
 
     List<OrderVO> selectByUserId(Integer id);
+
+    List<Order> selectByPage(OrderQuery orderQuery);
 }

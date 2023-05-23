@@ -17,4 +17,6 @@ public interface IUserService {
      JSONResult deleteById(Integer id);
 
      JSONResult deleteAll(Integer[] ids);
+
+     User login(String name, String password);
 }

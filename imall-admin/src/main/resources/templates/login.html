@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<link th:href="@{/static/css/Login.css}" rel="stylesheet" type="text/css" />
+<head>
+    <meta charset="UTF-8">
+    <div th:replace="header::common_resource"></div>
+    <title>登录</title>
+</head>
+<body>
+<section>
+    <!--背景色-->
+    <div class="color"></div>
+    <div class="color"></div>
+    <div class="color"></div>
+    <div class="box">
+        <!--背景圆-->
+        <div class="circlre" style="--x:0"></div>
+        <div class="circlre" style="--x:1"></div>
+        <div class="circlre" style="--x:2"></div>
+        <div class="circlre" style="--x:3"></div>
+        <div class="circlre" style="--x:4"></div>
+        <!--登录框-->
+        <div class="container">
+            <div class="form">
+                <h2>登录</h2>
+                <form id="formId"  method="post">
+                    <div class="inputBox">
+                        <input type="text" placeholder="用户名" name="username">
+                    </div>
+
+                    <div class="inputBox">
+                        <input type="password" placeholder="密码" name="password">
+                    </div>
+
+                    <div class="inputBox">
+                        <input type="text" placeholder="验证码" name="code">
+                        <p align="center"><img id="verifyCodeId" src="/kaptcha/getCode" onclick="refresh()" alt="6">
+                        </p>
+
+                    </div>
+
+                    <div class="inputBox">
+                        <input type="button" onclick="submitForm()" value="登录">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<!--<form id="formId"  method="post">-->
+<!--    用户名：<input type="text" name="username"/><br/>-->
+<!--    密码：<input type="password" name="password"/><br/>-->
+<!--    验证码：<input type="text" name="code"/>-->
+<!--    <img id="verifyCodeId" src="/verifyCode" onclick="refresh()"/>-->
+<!--    <br/>-->
+<!--    <input type="button" onclick="submitForm()" value="登录"/>-->
+<!--</form>-->
+
+<script>
+    function refresh() {
+        $('#verifyCodeId').attr('src', '/kaptcha/getCode?' + Math.random());
+    }
+
+    function submitForm() {
+        $.post(
+            '/user/login',
+            $('#formId').serialize(), // {'name':'zhsangs','password':'123'}
+            function(jsonResult) {
+                //{'code':0,'msg':'删除成功'}
+                console.log(jsonResult);
+                if (jsonResult.ok) {
+                    mylayer.okMsg(jsonResult.msg)
+                    mylayer.okUrl(jsonResult.msg, '/');
+                } else {
+                    mylayer.errorMsg(jsonResult.msg);
+                }
+            },
+            'json'
+        );
+    }
+</script>
+</body>
+</html>

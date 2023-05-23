@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <title>Title</title>
+    <div th:replace="header::common_resource"></div>
+</head>
+<body>
+<div class="demoTable">
+    <form class="layui-form layui-inline" action="">
+        用户编号：
+        <div class="layui-inline">
+            <input class="layui-input" id="userId" autocomplete="off">
+        </div>
+        订单编号：
+        <div class="layui-inline">
+            <input class="layui-input" id="orderNo" autocomplete="off">
+        </div>
+        创建开始时间
+        <div class="layui-inline">
+            <input id="beginGmtCreateId" type="text" autocomplete="off" class="layui-input" placeholder="yyyy-MM-dd HH:mm:ss">
+        </div>
+        创建结束时间
+        <div class="layui-inline">
+            <input id="endGmtCreateId" type="text" autocomplete="off" class="layui-input"  placeholder="yyyy-MM-dd HH:mm:ss">
+        </div>
+    </form>
+    <button class="layui-btn" data-type="reload">搜索</button>
+</div>
+<table class="layui-hide" id="test" lay-filter="test"></table>
+
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
+        <button class="layui-btn layui-btn-sm" lay-event="deleteAll">批量删除</button>
+    </div>
+</script>
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<script type="text/html" id="imageTemplet">
+    <image src="{{d.mainImageFullUrl}}"></image>
+</script>
+
+<script type="text/html" id="paymentTypeTemplet">
+    {{#      if(d.paymentType == 0) {                }}
+    <span class="layui-badge layui-bg-orange">货到付款</span>
+    {{#      } else if(d.paymentType == 1) {         }}
+    <span class="layui-badge layui-bg-green">微信</span>
+    {{#      } else if(d.paymentType == 2) {         }}
+    <span class="layui-badge layui-bg-cyan">支付宝</span>
+    {{#      } else if(d.paymentType == 3) {         }}
+    <span class="layui-badge layui-bg-red">银联</span>
+    {{#      }                                  }}
+</script>
+
+<script>
+    /*layui.use(['table'], function() {
+
+    });*/
+    layui.use(['table', 'laydate'], function(){
+        var table = layui.table;
+        var laydate = layui.laydate;
+
+        //日期时间选择器
+        laydate.render({
+            elem: '#beginGmtCreateId'
+            ,type: 'datetime'
+        });
+        laydate.render({
+            elem: '#endGmtCreateId'
+            ,type: 'datetime'
+        });
+
+        table.render({
+            elem: '#test'
+            ,url:'/order/selectByPage'
+            ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+            ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+                title: '提示'
+                ,layEvent: 'LAYTABLE_TIPS'
+                ,icon: 'layui-icon-tips'
+            }]
+            ,title: '用户数据表'
+            ,cols: [
+                [
+                    {type: 'checkbox', fixed: 'left'}
+                    ,{field:'orderNo', title:'订单编号',  fixed: 'left', sort: true}
+                    //,{field:'orderNo', title:'订单编号'}
+                    ,{field:'userId', title:'用户编号'}
+                    ,{field:'shippingId', title:'地址编号'}
+                    ,{field:'payment', title:'实付金额'}
+                    ,{field:'paymentType', title:'付款方式', templet:'#paymentTypeTemplet'}
+                    //,{field:'status', title:'状态', templet:'#statusTemplet'}
+                    ,{field:'gmtCreate', title:'创建时间',templet:"<div>{{d.gmtCreate?layui.util.toDateString(d.gmtCreate, 'yyyy-MM-dd HH:mm:ss'):'未知'}}</div>"}
+                    ,{field:'gmtModified', title:'修改时间',templet:"<div>{{d.gmtCreate?layui.util.toDateString(d.gmtCreate, 'yyyy-MM-dd HH:mm:ss'):'未知'}}</div>"}
+                    ,{fixed: 'right', title:'操作', toolbar: '#barDemo'}
+                ]
+            ]
+            ,page: true
+            ,id: 'tableId'
+        });
+
+        //头工具栏事件
+        table.on('toolbar(test)', function(obj){
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch(obj.event){
+                case 'add':
+                    layer.open({
+                        type: 2,
+                        area: ['550px', '400px'],
+                        content: '/user/getUserAddPage'
+                    });
+                    break;
+                case 'deleteAll':
+                    //[{"id":4,"name":"4","password":null,"age":0,"address":null},{"id":6,"name":"6","password":null,"age":0,"address":null}]
+                    var data = checkStatus.data;
+                    var ids = [];
+                    $(data).each(function() {
+                        ids.push(this.id);
+                    });
+                    //[4,6]
+                    ids = ids.join(',');// '4,6'
+                    layer.confirm('真的删除行么', function(index){
+                        $.post(
+                            '/user/deleteAll',
+                            {'ids': ids},
+                            function(jsonResult) {
+                                if (jsonResult.ok) {
+                                    mylayer.okMsg(jsonResult.msg);
+                                    //删除之后重新刷新table表格
+                                    //table.reload('tableId');
+
+                                    table.reload('tableId', {
+                                        done: function (res, curr, count) {
+                                            if (curr > 1 && res.data.length === 0) {
+                                                curr = curr - 1;
+                                                table.reload('tableId', {
+                                                    page: {
+                                                        curr: curr
+                                                    },
+                                                })
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    mylayer.errorMsg(jsonResult.msg)
+                                }
+                            },
+                            'json'
+                        );
+                        layer.close(index);
+                    });
+                    break;
+
+                //自定义头工具栏右侧图标 - 提示
+                case 'LAYTABLE_TIPS':
+                    layer.alert('这是工具栏右侧自定义的一个图标按钮');
+                    break;
+            };
+        });
+
+        //监听行工具事件
+        table.on('tool(test)', function(obj){
+            var data = obj.data;
+            console.log(obj)
+            if(obj.event === 'del'){
+                layer.confirm('真的删除行么', function(index){
+                    $.post(
+                        '/user/deleteById',
+                        {'id': data.id},
+                        function(jsonResult) {
+                            console.log(jsonResult);
+                            if (jsonResult.ok) {
+                                mylayer.okMsg(jsonResult.msg);
+                                //删除之后重新刷新table表格
+                                //table.reload('tableId');
+
+                                // 重载表格
+                                table.reload('tableId', {
+                                    done: function (res, curr, count) {
+                                        if (curr > 1 && res.data.length === 0) {
+                                            curr = curr - 1;
+                                            table.reload('tableId', {
+                                                page: {
+                                                    curr: curr
+                                                },
+                                            })
+                                        }
+                                    }
+                                });
+                            } else {
+                                mylayer.errorMsg(jsonResult.msg)
+                            }
+                        },
+                        'json'
+                    );
+                    layer.close(index);
+                });
+            } else if(obj.event === 'edit'){
+                layer.open({
+                    type: 2,
+                    area: ['950px', '600px'],
+                    content: '/user/getUserUpdatePage?id=' + data.id
+                });
+            }
+        });
+
+
+        var $ = layui.$, active = {
+            reload: function(){
+                //执行重载
+                table.reload('tableId', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    ,where: {
+                        userId: $('#userId').val(),
+                        orderNo: $('#orderNo').val(),
+                        beginGmtCreate: $('#beginGmtCreateId').val(),
+                        endGmtCreate: $('#endGmtCreateId').val()
+                    }
+                });
+            }
+        };
+
+        $('.demoTable .layui-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+    });
+</script>
+</body>
+</html>

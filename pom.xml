@@ -109,6 +109,13 @@
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
 
+<!--        验证码生成工具-->
+        <dependency>
+            <groupId>com.github.penggle</groupId>
+            <artifactId>kaptcha</artifactId>
+            <version>2.3.2</version>
+        </dependency>
+
         <!-- quartz 定时任务-->
         <!-- Quartz坐标 -->
         <dependency>

@@ -59,4 +59,8 @@ public class UserServiceImpl implements IUserService {
         return count == ids.length ? JSONResult.ok("删除成功") : JSONResult.error("删除失败");
     }
 
+    @Override
+    public User login(String name, String password) {
+        return userMapper.login(name, password);
+    }
 }

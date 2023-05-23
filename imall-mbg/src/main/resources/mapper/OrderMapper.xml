@@ -219,4 +219,21 @@
     WHERE o.user_id=#{id}
     order by o.gmt_create desc
   </select>
+
+  <select id="selectByPage" parameterType="OrderQuery" resultType="com.yangnan.mall.pojo.Order">
+    select
+    <include refid="Base_Column_List" />
+    from `order`
+    <where>
+      <if test="orderNo!=null">
+        and order_no=#{orderNo}
+      </if>
+      <if test="userId!=null">
+        and user_id=#{userId}
+      </if>
+      <if test="beginGmtCreate!=null and endGmtCreate!=null">
+        and gmt_create between #{beginGmtCreate} and #{endGmtCreate}
+      </if>
+    </where>
+  </select>
 </mapper>
