@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <title>Title</title>
+    <div th:replace="header::common_resource"></div>
+</head>
+<body>
+<form id="formId" class="layui-form layui-form-pane" action="">
+    <div class="layui-form-item">
+        <label class="layui-form-label">用户编号</label>
+        <div class="layui-input-block">
+            <input type="text" name="userId" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">地址编号</label>
+        <div class="layui-input-block">
+            <input type="text" name="shippingId" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">实付金额</label>
+        <div class="layui-input-block">
+            <input type="text" name="payment" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">付款方式</label>
+        <div class="layui-input-block">
+            <input type="radio" name="paymentType" value="0" title="货到付款">
+            <input type="radio" name="paymentType" value="1" title="微信">
+            <input type="radio" name="paymentType" value="2" title="支付宝">
+            <input type="radio" name="paymentType" value="3" title="银联">
+        </div>
+    </div>
+
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button type="button" class="layui-btn"  onclick="submitForm()" lay-filter="demo1">添加</button>
+        </div>
+    </div>
+</form>
+
+<script>
+
+    function submitForm() {
+        $.post(
+            '/order/add',
+            $('#formId').serialize(),
+            function(jsonResult) {
+                console.log(jsonResult);
+                if (jsonResult.ok) {
+                    mylayer.okMsg(jsonResult.msg)
+                    //关闭弹出框
+                    var index = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(index);
+                    //刷新父页面
+                    window.parent.location.reload();
+                } else {
+                    mylayer.errorMsg(jsonResult.msg);
+                }
+            },
+            'json'
+        );
+    }
+</script>
+</body>
+</html>

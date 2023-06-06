@@ -8,7 +8,7 @@
 </head>
 <body>
 <div class="login_top clearfix">
-    <a href="index.html" class="login_logo"><img src="images/logo02.png"></a>
+    <a href="index.html" class="login_logo"><img th:src="@{/images/logo02.png}"></a>
 </div>
 
 <div class="login_form_bg">
@@ -18,7 +18,7 @@
         <div class="login_form fr">
             <div class="login_title clearfix">
                 <h1>用户登录</h1>
-                <a href="#">立即注册</a>
+                <a href="/user/getRegistPage">立即注册</a>
             </div>
             <div class="form_input">
                 <form id="formId">
@@ -63,7 +63,12 @@
             function(jsonResult) {
                 if (jsonResult.ok) {
                     var beforePath = '[[${session.beforePath}]]'
-                    mylayer.okUrl(jsonResult.msg, beforePath);
+                    if(beforePath==""){
+                        mylayer.okUrl(jsonResult.msg, "/");
+                    }
+                    else {
+                        mylayer.okUrl(jsonResult.msg, beforePath);
+                    }
                 } else {
                     mylayer.errorMsg(jsonResult.msg);
                 }

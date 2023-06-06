@@ -23,4 +23,5 @@ public interface UserMapper {
     List<User> selectByPage(UserQuery userQuery);
 
     int deleteAll(Integer[] ids);
+
 }

@@ -185,4 +185,15 @@
       gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectDetailByPage" parameterType="OrderDetailQuery" resultType="com.yangnan.mall.pojo.OrderItem">
+    select
+    <include refid="Base_Column_List" />
+    from `order_item`
+    <where>
+      <if test="orderNo!=null">
+        and order_no=#{orderNo}
+      </if>
+    </where>
+  </select>
 </mapper>

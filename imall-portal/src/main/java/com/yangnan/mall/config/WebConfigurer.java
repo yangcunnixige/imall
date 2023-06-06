@@ -14,22 +14,15 @@ public class WebConfigurer implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/pic/**")
-                .addResourceLocations("file:/D:\\project\\imall\\imall-portal\\src\\main\\resources\\static\\");
+                .addResourceLocations("file:/D:\\project\\blog\\src\\mypic\\");
         WebMvcConfigurer.super.addResourceHandlers(registry);
     }
 
-
-    /*<mvc:interceptors>
-		<mvc:interceptor>
-			<mvc:mapping path="/**"/>
-			<bean class="com.situ.mvc.interceptor.MyInterceptor2"/>
-		</mvc:interceptor>
-	</mvc:interceptors>*/
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // addPathPatterns("/**") 表示拦截所有的请求
         // excludePathPatterns()   代表排除哪些请求不需要拦截
         registry.addInterceptor(new LoginInterceptor())
-                .addPathPatterns("/cart/**", "/order/**");
+                .addPathPatterns("/cart/**", "/order/**","/user/getUserCenterPage","/user/getUserAddressPage");
     }
 }

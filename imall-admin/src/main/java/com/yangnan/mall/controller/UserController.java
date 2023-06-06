@@ -1,8 +1,6 @@
 package com.yangnan.mall.controller;
 
 import com.google.code.kaptcha.Constants;
-import com.yangnan.mall.pojo.Category;
-import com.yangnan.mall.pojo.Product;
 import com.yangnan.mall.pojo.User;
 import com.yangnan.mall.pojo.query.UserQuery;
 import com.yangnan.mall.service.IUserService;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 @Controller
 @RequestMapping("/user")
@@ -57,6 +54,7 @@ public class UserController {
     @ResponseBody
     public JSONResult add(User user) {
         System.out.println("UserController.add");
+        System.out.println("123456"+user);
         return userService.add(user);
     }
 
@@ -125,5 +123,9 @@ public class UserController {
         return "login";
     }
 
-
+    @RequestMapping("/logout")
+    public String logout(HttpSession session) {
+        session.removeAttribute("user");
+        return "redirect:/";
+    }
 }

@@ -1,6 +1,8 @@
 package com.yangnan.mall.controller;
 
+import com.yangnan.mall.pojo.Carousel;
 import com.yangnan.mall.pojo.Category;
+import com.yangnan.mall.service.ICarouselService;
 import com.yangnan.mall.service.ICategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -17,6 +19,9 @@ public class IndexController {
     private ICategoryService categoryService;
 
     @Autowired
+    private ICarouselService carouselService;
+
+    @Autowired
     private RedisTemplate redisTemplate;
 
 
@@ -31,14 +36,10 @@ public class IndexController {
         List<Category> secondCategoryList = categoryService.selectSecondCategoryList();
         model.addAttribute("topCategoryList", topCategoryList);
         model.addAttribute("secondCategoryList", secondCategoryList);
+
+        List<Carousel> carouselList = carouselService.selectAll();
+        System.out.println(carouselList);
+        model.addAttribute("carouselList",carouselList);
         return "index";
     }
-   /* @RequestMapping("/")
-    public String index(Model model) {
-        List<Category> topCategoryList = categoryService.selectTopCategoryList();
-        List<Category> secondCategoryList = categoryService.selectSecondCategoryList();
-        model.addAttribute("topCategoryList", topCategoryList);
-        model.addAttribute("secondCategoryList", secondCategoryList);
-        return "index";
-    }*/
 }

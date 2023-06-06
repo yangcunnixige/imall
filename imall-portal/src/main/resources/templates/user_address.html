@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>天天生鲜-用户中心</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
+</head>
+<body>
+
+<div th:replace="top::top"></div>
+
+<div class="main_con clearfix">
+    <div class="left_menu_con clearfix">
+        <h3>用户中心</h3>
+        <ul>
+            <li><a href="/user/getUserCenterPage">· 个人信息</a></li>
+            <li><a href="/order/getOrderListPage">· 全部订单</a></li>
+            <li><a href="/user/getUserAddressPage" class="active">· 收货地址</a></li>
+        </ul>
+    </div>
+    <div class="right_content clearfix">
+        <h3 class="common_title2">收货地址</h3>
+        <div class="site_con">
+            <dl>
+                <!--                <dt>当前地址：</dt>-->
+                <!--                <th:block th:each="shipping:${list}">-->
+
+                <!--                <dd th:text="${shipping.receiverProvince}+' '+${shipping.receiverCity}+' '+${shipping.receiverDistrict}+' '+${shipping.receiverAddress}+' '+${shipping.receiverName}+' '+${shipping.receiverPhone}+' '+${shipping.receiverZip}"> </dd>-->
+                <!--&lt;!&ndash;                <dd th:text="${shipping.receiverProvince}"></dd><dd> <em th:text="${shipping.receiverCity}"></em><em th:text="${shipping.receiverDistrict}">&nbsp;</em><em th:text="${shipping.receiverAddress}">&nbsp;</em><em th:text="${shipping.receiverName}">&nbsp;</em><em th:text="${shipping.receiverPhone}">&nbsp;</em><em th:text="${shipping.receiverZip}">&nbsp;</em></dd>&ndash;&gt;-->
+                <!--&lt;!&ndash;                <dd><em th:text="${shipping.receiverProvince}"> </em> <em th:text="${shipping.receiverCity}">      </em><em th:text="${shipping.receiverDistrict}">&nbsp;</em><em th:text="${shipping.receiverAddress}">&nbsp;</em><em th:text="${shipping.receiverName}">&nbsp;</em><em th:text="${shipping.receiverPhone}">&nbsp;</em><em th:text="${shipping.receiverZip}">&nbsp;</em></dd>&ndash;&gt;-->
+                <!--                </th:block>-->
+                <table id="tableId" class="layui-table">
+                    <colgroup>
+                        <!--                        <col width="150">-->
+                        <!--                        <col width="200">-->
+                        <col>
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>省份</th>
+                        <th>城市</th>
+                        <th>区县</th>
+                        <th>详细地址</th>
+                        <th>收件人</th>
+                        <th>手机</th>
+                        <th>邮编</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="shipping:${list}">
+                        <td th:text="${shipping.receiverProvince}"></td>
+                        <td th:text="${shipping.receiverCity}"></td>
+                        <td th:text="${shipping.receiverDistrict}"></td>
+                        <td th:text="${shipping.receiverAddress}"></td>
+                        <td th:text="${shipping.receiverName}"></td>
+                        <td th:text="${shipping.receiverPhone}"></td>
+                        <td th:text="${shipping.receiverZip}"></td>
+                        <td><input id="deleteButton" type="button" value="删除"
+                                   th:onclick="'deleteInfo('+${shipping.id}+')'"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </dl>
+        </div>
+        <h3 class="common_title2">编辑地址</h3>
+        <div class="site_con">
+            <form id="formId">
+                <div class="form_group">
+                    <label>省份：</label>
+                    <input type="text" name="receiverProvince">
+                </div>
+                <div class="form_group">
+                    <label>城市：</label>
+                    <input class="text" name="receiverCity">
+                </div>
+                <div class="form_group">
+                    <label>区县：</label>
+                    <input type="text" name="receiverDistrict">
+                </div>
+                <div class="form_group">
+                    <label>详细地址：</label>
+                    <input type="text" name="receiverAddress">
+                </div>
+                <div class="form_group">
+                    <label>收件人：</label>
+                    <input type="text" name="receiverName">
+                </div>
+                <div class="form_group">
+                    <label>手机：</label>
+                    <input type="text" name="receiverPhone">
+                </div>
+                <div class="form_group">
+                    <label>邮编：</label>
+                    <input type="text" name="receiverZip">
+                </div>
+
+                <input type="button" name="" value="提交" onclick="submitForm()" class="info_submit">
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" th:src="@{/jquery-2.1.4.js}"></script>
+<script type="text/javascript" th:src="@{/layer/layer.js}"></script>
+<script type="text/javascript" th:src="@{/mylayer.js}"></script>
+<script>
+    function submitForm() {
+        $.post(
+            '/user/addShipping',
+            $('#formId').serialize(),
+            function (jsonResult) {
+                if (jsonResult.ok) {
+                    mylayer.okUrl(jsonResult.msg, "/user/getUserAddressPage");
+                } else {
+                    mylayer.errorMsg(jsonResult.msg);
+                }
+            },
+            'json'
+        );
+    }
+
+    function deleteInfo(id) {
+        console.log(id);
+        layer.confirm('确认删除', function (index) {
+            $.post(
+                '/user/deleteShipping',
+                {'id': id},
+                function (jsonResult) {
+                    if (jsonResult.ok) {
+                        mylayer.okUrl(jsonResult.msg, '/user/getUserAddressPage');
+                    } else {
+                        mylayer.errorMsg(jsonResult.msg);
+                    }
+                },
+                'json'
+            );
+            layer.close(index);
+        });
+    }
+</script>
+
+
+<div class="footer">
+    <div class="foot_link">
+        <a href="#">关于我们</a>
+        <span>|</span>
+        <a href="#">联系我们</a>
+        <span>|</span>
+        <a href="#">招聘人才</a>
+        <span>|</span>
+        <a href="#">友情链接</a>
+    </div>
+    <p>CopyRight © 2016 北京天天生鲜信息技术有限公司 All Rights Reserved</p>
+    <p>电话：010-****888 京ICP备*******8号</p>
+</div>
+
+</body>
+</html>

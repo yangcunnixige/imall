@@ -142,4 +142,10 @@
     from category
     where id=#{id}
   </select>
+    <select id="selectCategoryCount" resultType="com.yangnan.mall.pojo.vo.CategoryCountVO">
+      SELECT
+      c.name,COUNT(*) AS 'value'
+      FROM product AS p INNER JOIN category AS c ON p.category_id=c.id
+      GROUP BY c.id
+    </select>
 </mapper>

@@ -1,6 +1,7 @@
 package com.yangnan.mall.mapper;
 
 import com.yangnan.mall.pojo.Category;
+import com.yangnan.mall.pojo.vo.CategoryCountVO;
 
 import java.util.List;
 
@@ -24,4 +25,6 @@ public interface CategoryMapper {
     List<Category> selectSecondCategoryList();
 
     int selectTopCategoryIdBySecondCategotyId(Integer id);
+
+    List<CategoryCountVO> selectCategoryCount();
 }

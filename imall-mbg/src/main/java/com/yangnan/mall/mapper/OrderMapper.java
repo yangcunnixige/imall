@@ -1,9 +1,9 @@
 package com.yangnan.mall.mapper;
 
 import com.yangnan.mall.pojo.Order;
-import com.yangnan.mall.pojo.User;
+import com.yangnan.mall.pojo.OrderItem;
+import com.yangnan.mall.pojo.query.OrderDetailQuery;
 import com.yangnan.mall.pojo.query.OrderQuery;
-import com.yangnan.mall.pojo.query.UserQuery;
 import com.yangnan.mall.pojo.vo.OrderVO;
 
 import java.util.List;
@@ -24,4 +24,6 @@ public interface OrderMapper {
     List<OrderVO> selectByUserId(Integer id);
 
     List<Order> selectByPage(OrderQuery orderQuery);
+
+    int deleteAll(Long[] ids);
 }

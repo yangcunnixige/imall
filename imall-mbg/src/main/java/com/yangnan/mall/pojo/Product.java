@@ -35,6 +35,8 @@ public class Product implements Serializable {
     //@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date gmtModified;
 
+    private String mainImageFullUrl;
+
     //mainImageFullUrl
     public String getMainImageFullUrl() {
         return ImageServerUtil.getImageUrl(mainImage);

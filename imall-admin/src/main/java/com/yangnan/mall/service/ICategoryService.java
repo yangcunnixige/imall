@@ -11,4 +11,6 @@ public interface ICategoryService {
     List<Category> selectSecondCategoryListByTopCategoryId(Integer id);
 
     int selectTopCategoryIdBySecondCategotyId(Integer id);
+
+    JSONResult selectCategoryCount();
 }

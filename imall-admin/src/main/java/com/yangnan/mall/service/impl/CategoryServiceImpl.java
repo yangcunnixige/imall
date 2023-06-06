@@ -2,6 +2,7 @@ package com.yangnan.mall.service.impl;
 
 import com.yangnan.mall.mapper.CategoryMapper;
 import com.yangnan.mall.pojo.Category;
+import com.yangnan.mall.pojo.vo.CategoryCountVO;
 import com.yangnan.mall.service.ICategoryService;
 import com.yangnan.mall.util.JSONResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,5 +30,12 @@ public class CategoryServiceImpl implements ICategoryService {
     @Override
     public int selectTopCategoryIdBySecondCategotyId(Integer id) {
         return categoryMapper.selectTopCategoryIdBySecondCategotyId(id);
+    }
+
+    @Override
+    public JSONResult selectCategoryCount() {
+        System.out.println("categoryMapper.selectCategoryCount()");
+        List<CategoryCountVO> list = categoryMapper.selectCategoryCount();
+        return JSONResult.ok("", list);
     }
 }

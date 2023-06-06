@@ -5,4 +5,6 @@ import com.yangnan.mall.util.JSONResult;
 
 public interface IUserService {
     User login(String username, String password);
+
+   int regist(User user);
 }

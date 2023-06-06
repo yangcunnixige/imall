@@ -25,7 +25,6 @@ public class WebConfigurer implements WebMvcConfigurer {
         WebMvcConfigurer.super.addResourceHandlers(registry);
     }
 
-
     /*<mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/**"/>

@@ -7,9 +7,9 @@ public class ImageServerUtil {
     public static final int QINIU = 0;
     public static final int LOCAL = 1;
 
-    public static final int IMAGE_SERVER = QINIU;
+    public static final int IMAGE_SERVER = LOCAL;
 
-    public static final String IMAGE_SERVER_LOCAL = "/pic";
+    public static final String IMAGE_SERVER_LOCAL = "/pic/";
     public static final String IMAGE_SERVER_QINIU = "http://rtrkl7rcm.hd-bkt.clouddn.com/";
 
     public static String getImageUrl(String fileName) {

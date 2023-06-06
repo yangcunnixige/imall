@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <title>Title</title>
+    <div th:replace="header::common_resource"></div>
+</head>
+
+<body>
+<!-- 为 ECharts 准备一个定义了宽高的 DOM -->
+
+<style>
+    div{
+        display:inline-block;
+    }
+</style>
+<div id="main1" style="width: 650px;height:600px;"></div>
+<div id="main2" style="width: 650px;height:600px;"></div>
+<script>
+    // 基于准备好的dom，初始化echarts实例
+    var myChart1 = echarts.init(document.getElementById('main1'));
+    var myChart2 = echarts.init(document.getElementById('main2'));
+
+    $.post(
+        '/echarts/getEcharts',
+        function(jsonResult) {
+            //[{name: 'java1807', value: 4},{name: 'java1812', value: 7}]
+            console.log(jsonResult);
+            var xArray = [];
+            var yArray = [];
+            $(jsonResult.data).each(function() {
+                xArray.push(this.name);
+                yArray.push(this.value);
+            });
+
+
+            // 指定图表的配置项和数据
+            var option1 = {
+                title: {
+                    text: 'ECharts '
+                },
+                tooltip: {},
+                legend: {
+                    data: ['类别数']
+                },
+                xAxis: {
+                    data: xArray
+                },
+                yAxis: {},
+                series: [
+                    {
+                        name: '类别数',
+                        type: 'bar',
+                        data: yArray
+                    }
+                ]
+            };
+
+            // 使用刚指定的配置项和数据显示图表。
+            myChart1.setOption(option1);
+
+
+
+
+            // 饼状图
+            var option2 = {
+                title: {
+                    text: '类比数',
+                    //subtext: 'Fake Data',
+                    left: 'center'
+                },
+                tooltip: {
+                    trigger: 'item'
+                },
+                legend: {
+                    orient: 'vertical',
+                    left: 'left'
+                },
+                series: [
+                    {
+                        name: 'Access From',
+                        type: 'pie',
+                        radius: '50%',
+                        data: jsonResult.data,
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    }
+                ]
+            };
+            myChart2.setOption(option2);
+        },
+        'json'
+    );
+
+</script>
+
+</body>
+</html>

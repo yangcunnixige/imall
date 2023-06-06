@@ -236,4 +236,14 @@
       </if>
     </where>
   </select>
+
+  <delete id="deleteAll">
+    delete from `order`
+    where order_no IN
+    <foreach collection="array" open="(" close=")" item="id" separator=",">
+      #{id}
+    </foreach>
+  </delete>
+
+
 </mapper>

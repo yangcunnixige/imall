@@ -35,7 +35,7 @@ public class UploadController {
         //上传到本地
         if (ImageServerUtil.IMAGE_SERVER == ImageServerUtil.LOCAL) {
             //c44be503737d44f2b872c6e19160f43c.png
-            String filePath = "D:\\mypic\\" + newFileName;
+            String filePath = "D:\\project\\blog\\src\\mypic\\" + newFileName;
             try {
                 file.transferTo(new File(filePath));
             } catch (IOException e) {

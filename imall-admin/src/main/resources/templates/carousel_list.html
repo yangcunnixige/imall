@@ -5,15 +5,19 @@
     <div th:replace="header::common_resource"></div>
 </head>
 <body>
-<div class="demoTable">
+<!--<div class="demoTable">
     <form class="layui-form layui-inline" action="">
-        用户编号：
+        商品名：
         <div class="layui-inline">
-            <input class="layui-input" id="userId" autocomplete="off">
+            <input class="layui-input" id="nameId" autocomplete="off">
         </div>
-        订单编号：
+        状态：
         <div class="layui-inline">
-            <input class="layui-input" id="orderNo" autocomplete="off">
+            <select id="statusId">
+                <option value="">-请选择-</option>
+                <option value="1">上架</option>
+                <option value="2">下架</option>
+            </select>
         </div>
         创建开始时间
         <div class="layui-inline">
@@ -25,7 +29,38 @@
         </div>
     </form>
     <button class="layui-btn" data-type="reload">搜索</button>
-</div>
+</div>-->
+<!--<h1>轮播图列表</h1>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>图片地址</th>
+        <th>链接地址</th>
+        <th>排序</th>
+        <th>创建时间</th>
+        <th>修改时间</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="carousel : ${carouselList}">
+        <td th:text="${carousel.id}"></td>
+        <td th:text="${carousel.imgUrl}"></td>
+        <td th:text="${carousel.linkUrl}"></td>
+        <td th:text="${carousel.sort}"></td>
+        <td th:text="${carousel.createTime}"></td>
+        <td th:text="${carousel.updateTime}"></td>
+        <td>
+            <a th:href="@{/carousel/edit/{id}(id=${carousel.id})}">编辑</a>
+            <a th:href="@{/carousel/delete/{id}(id=${carousel.id})}">删除</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<a href="/carousel/add">添加轮播图</a>-->
+
+
 <table class="layui-hide" id="test" lay-filter="test"></table>
 
 <script type="text/html" id="toolbarDemo">
@@ -36,7 +71,6 @@
 </script>
 
 <script type="text/html" id="barDemo">
-    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail">详情</a>
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
@@ -45,17 +79,6 @@
     <image src="{{d.mainImageFullUrl}}"></image>
 </script>
 
-<script type="text/html" id="paymentTypeTemplet">
-    {{#      if(d.paymentType == 0) {                }}
-    <span class="layui-badge layui-bg-orange">货到付款</span>
-    {{#      } else if(d.paymentType == 1) {         }}
-    <span class="layui-badge layui-bg-green">微信</span>
-    {{#      } else if(d.paymentType == 2) {         }}
-    <span class="layui-badge layui-bg-cyan">支付宝</span>
-    {{#      } else if(d.paymentType == 3) {         }}
-    <span class="layui-badge layui-bg-red">银联</span>
-    {{#      }                                  }}
-</script>
 
 <script>
     /*layui.use(['table'], function() {
@@ -77,25 +100,23 @@
 
         table.render({
             elem: '#test'
-            ,url:'/order/selectByPage'
+            ,url:'/carousel/selectByPage'
             ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
             ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
                 title: '提示'
                 ,layEvent: 'LAYTABLE_TIPS'
                 ,icon: 'layui-icon-tips'
             }]
-            ,title: '用户数据表'
+            ,title: '轮播图列表'
             ,cols: [
                 [
                     {type: 'checkbox', fixed: 'left'}
-                    ,{field:'orderNo', title:'订单编号',  fixed: 'left', sort: true}
-                    ,{field:'userId', title:'用户编号',width:100}
-                    ,{field:'shippingId', title:'地址编号',width:100}
-                    ,{field:'payment', title:'实付金额'}
-                    ,{field:'paymentType', title:'付款方式', templet:'#paymentTypeTemplet',width:100}
-                    //,{field:'status', title:'状态', templet:'#statusTemplet'}
-                    ,{field:'gmtCreate', title:'创建时间',templet:"<div>{{d.gmtCreate?layui.util.toDateString(d.gmtCreate, 'yyyy-MM-dd HH:mm:ss'):'未知'}}</div>"}
-                    ,{field:'gmtModified', title:'修改时间',templet:"<div>{{d.gmtCreate?layui.util.toDateString(d.gmtCreate, 'yyyy-MM-dd HH:mm:ss'):'未知'}}</div>"}
+                    ,{field:'id', title:'ID',  fixed: 'left', sort: true}
+                    ,{field:'imageUrl', title:'图片', templet:'#imageTemplet'}
+                    ,{field:'linkUrl', title:'链接地址'}
+                    ,{field:'sort', title:'排序'}
+                    ,{field:'createTime', title:'创建时间',templet:"<div>{{d.createTime?layui.util.toDateString(d.createTime, 'yyyy-MM-dd HH:mm:ss'):'未知'}}</div>"}
+                    ,{field:'updateTime', title:'修改时间',templet:"<div>{{d.updateTime?layui.util.toDateString(d.updateTime, 'yyyy-MM-dd HH:mm:ss'):'未知'}}</div>"}
                     ,{fixed: 'right', title:'操作', toolbar: '#barDemo'}
                 ]
             ]
@@ -110,8 +131,8 @@
                 case 'add':
                     layer.open({
                         type: 2,
-                        area: ['550px', '400px'],
-                        content: '/order/getUserAddPage'
+                        area: ['950px', '600px'],
+                        content: '/carousel/getCarouselAddPage'
                     });
                     break;
                 case 'deleteAll':
@@ -119,13 +140,13 @@
                     var data = checkStatus.data;
                     var ids = [];
                     $(data).each(function() {
-                        ids.push(this.orderNo);
+                        ids.push(this.id);
                     });
                     //[4,6]
                     ids = ids.join(',');// '4,6'
                     layer.confirm('真的删除行么', function(index){
                         $.post(
-                            '/order/deleteAll',
+                            '/carousel/deleteAll',
                             {'ids': ids},
                             function(jsonResult) {
                                 if (jsonResult.ok) {
@@ -169,8 +190,8 @@
             if(obj.event === 'del'){
                 layer.confirm('真的删除行么', function(index){
                     $.post(
-                        '/order/deleteById',
-                        {'id': data.orderNo},
+                        '/carousel/deleteById',
+                        {'id': data.id},
                         function(jsonResult) {
                             console.log(jsonResult);
                             if (jsonResult.ok) {
@@ -203,20 +224,13 @@
                 layer.open({
                     type: 2,
                     area: ['950px', '600px'],
-                    content: '/order/getOrderUpdatePage?id=' + data.orderNo
-                });
-            }
-            else if(obj.event === 'detail'){
-                layer.open({
-                    type: 2,
-                    area: ['1300px', '600px'],
-                    content: '/order/getOrderDetailPage?id=' + data.orderNo
+                    content: '/carousel/getCarouselUpdatePage?id=' + data.id
                 });
             }
         });
 
 
-        var $ = layui.$, active = {
+        /*var $ = layui.$, active = {
             reload: function(){
                 //执行重载
                 table.reload('tableId', {
@@ -224,14 +238,14 @@
                         curr: 1 //重新从第 1 页开始
                     }
                     ,where: {
-                        userId: $('#userId').val(),
-                        orderNo: $('#orderNo').val(),
+                        name: $('#nameId').val(),
+                        status: $('#statusId').val(),
                         beginGmtCreate: $('#beginGmtCreateId').val(),
                         endGmtCreate: $('#endGmtCreateId').val()
                     }
                 });
             }
-        };
+        };*/
 
         $('.demoTable .layui-btn').on('click', function(){
             var type = $(this).data('type');
@@ -239,5 +253,7 @@
         });
     });
 </script>
+
+
 </body>
 </html>

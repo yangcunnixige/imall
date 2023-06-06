@@ -19,6 +19,8 @@ public class OrderItem implements Serializable {
 
     private String productImage;
 
+    private String mainImageFullUrl;
+
     public String getMainImageFullUrl() {
         return ImageServerUtil.getImageUrl(productImage);
     }

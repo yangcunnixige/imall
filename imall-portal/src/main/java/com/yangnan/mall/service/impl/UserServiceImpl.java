@@ -16,4 +16,9 @@ public class UserServiceImpl implements IUserService {
     public User login(String username, String password) {
         return userMapper.login(username, password);
     }
+
+    @Override
+    public int regist(User user) {
+        return userMapper.insertSelective(user);
+    }
 }
